@@ -1,0 +1,54 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Database backups and dumps
+*.bak
+*.dump
+*.sql.gz
+*.sql.zip
+
+# MySQL Workbench auto-saves
+*.mwb.bak
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Log files
+*.log
+logs/
+
+# Flask specific
+instance/
+.webassets-cache
+flask_session/
+
+# Environment variables
+.env
+.flaskenv
+
+# Local development configuration
+config.local.py
