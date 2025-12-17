@@ -14,21 +14,23 @@ class RoleDAO:
         return roles
     
     def assign_role(self, user_id, role):
-        cur = self.mysql.connection.cursor()
+        conn = self.mysql.connection
+        cur = conn.cursor()
         cur.execute("""
             INSERT INTO UsersRoles (user_id, role)
             VALUES (%s, %s)
         """, (user_id, role))
-        self.mysql.connection.commit()
+        conn.commit()
         cur.close()
         
     def remove_role(self, user_role_id):
-        cur = self.mysql.connection.cursor()
+        conn = self.mysql.connection
+        cur = conn.cursor()
         cur.execute("""
             DELETE FROM UsersRoles 
             WHERE user_role_id = %s
         """, (user_role_id,))
-        self.mysql.connection.commit()
+        conn.commit()
         cur.close()
         
     def get_users_by_role(self, role):
