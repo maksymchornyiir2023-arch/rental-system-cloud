@@ -38,8 +38,9 @@ class MySQL:
             user=self.app.config['MYSQL_USER'],
             password=self.app.config['MYSQL_PASSWORD'],
             database=self.app.config['MYSQL_DB'],
+            database=self.app.config['MYSQL_DB'],
             cursorclass=pymysql.cursors.DictCursor,
-            ssl={'ssl': {'ssl_disabled': False}} # Enable SSL for Azure
+            ssl={'check_hostname': False} # Enable SSL for Azure (relaxed verification)
         )
 
 mysql = MySQL(app)
