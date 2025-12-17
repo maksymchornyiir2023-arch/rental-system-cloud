@@ -10,17 +10,19 @@ class UserDAO:
         return rows
 
     def create_user(self, data):
-        cur = self.mysql.connection.cursor()
+        conn = self.mysql.connection  # Store connection to reuse
+        cur = conn.cursor()
         cur.execute("""
             INSERT INTO Users (username, email, phone)
             VALUES (%s, %s, %s)
         """, (data['username'], data['email'], data['phone']))
-        self.mysql.connection.commit()
+        conn.commit()  # Commit on the SAME connection
         cur.close()
 
     def update_user(self, user_id, data):
         # First, get the current user data
-        cur = self.mysql.connection.cursor()
+        conn = self.mysql.connection
+        cur = conn.cursor()
         cur.execute("SELECT username, email, phone FROM Users WHERE user_id=%s", (user_id,))
         current_user = cur.fetchone()
         
@@ -39,14 +41,15 @@ class UserDAO:
             WHERE user_id=%s
         """, (username, email, phone, user_id))
         
-        self.mysql.connection.commit()
+        conn.commit()
         cur.close()
         return True
 
     def delete_user(self, user_id):
-        cur = self.mysql.connection.cursor()
+        conn = self.mysql.connection
+        cur = conn.cursor()
         cur.execute("DELETE FROM Users WHERE user_id=%s", (user_id,))
-        self.mysql.connection.commit()
+        conn.commit()
         cur.close()
 
     def get_user_with_rentals(self, user_id):

@@ -64,11 +64,12 @@ class RentalDAO:
         return (rental, user, car)
         
     def create_rental(self, data):
-        cur = self.mysql.connection.cursor()
+        conn = self.mysql.connection
+        cur = conn.cursor()
         cur.execute("""
             INSERT INTO Rentals (user_id, car_id, location_id, start_date, end_date)
             VALUES (%s, %s, %s, %s, %s)
         """, (data['user_id'], data['car_id'], data['location_id'], 
               data['start_date'], data['end_date']))
-        self.mysql.connection.commit()
+        conn.commit()
         cur.close()

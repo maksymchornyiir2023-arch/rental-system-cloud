@@ -17,12 +17,13 @@ class GenericDAO:
         placeholders = ', '.join(['%s'] * len(data))
         values = tuple(data.values())
         
-        cur = self.mysql.connection.cursor()
+        conn = self.mysql.connection
+        cur = conn.cursor()
         query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
         
         cur.execute(query, values)
         last_id = cur.lastrowid
-        self.mysql.connection.commit()
+        conn.commit()
         cur.close()
         
         return last_id
@@ -41,7 +42,8 @@ class GenericDAO:
             list: List of inserted record IDs
         """
         inserted_ids = []
-        cur = self.mysql.connection.cursor()
+        conn = self.mysql.connection
+        cur = conn.cursor()
         
         for i in range(start_num, start_num + count):
             value = f"Noname{i}"
@@ -90,7 +92,7 @@ class GenericDAO:
                 
             inserted_ids.append(cur.lastrowid)
         
-        self.mysql.connection.commit()
+        conn.commit()
         cur.close()
         
         return inserted_ids
@@ -132,7 +134,8 @@ class GenericDAO:
         """
         Creates a stored procedure that calculates aggregate values
         """
-        cur = self.mysql.connection.cursor()
+        conn = self.mysql.connection
+        cur = conn.cursor()
         
         # First drop the procedure if it exists
         cur.execute("DROP PROCEDURE IF EXISTS CalculateAggregate")
@@ -153,7 +156,7 @@ class GenericDAO:
         """
         
         cur.execute(procedure_sql)
-        self.mysql.connection.commit()
+        conn.commit()
         cur.close()
     def create_dynamic_tables_and_distribute_data(self, parent_table_name):
         """
@@ -169,7 +172,8 @@ class GenericDAO:
         table1_name = f"{parent_table_name}_copy1_{timestamp}"
         table2_name = f"{parent_table_name}_copy2_{timestamp}"
         
-        cur = self.mysql.connection.cursor()
+        conn = self.mysql.connection
+        cur = conn.cursor()
         
         try:
             # Get the structure of the parent table
@@ -219,7 +223,7 @@ class GenericDAO:
                 else:
                     table2_count += 1
             
-            self.mysql.connection.commit()
+            conn.commit()
             
             return {
                 'parent_table': parent_table_name,
@@ -235,7 +239,7 @@ class GenericDAO:
             }
             
         except Exception as e:
-            self.mysql.connection.rollback()
+            conn.rollback()
             raise e
         finally:
             cur.close()
